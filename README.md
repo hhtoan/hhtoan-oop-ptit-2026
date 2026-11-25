@@ -20,6 +20,20 @@ npm run dev              # mở http://localhost:3000
   `psql "$DATABASE_URL" -f db/schema.sql -f db/seed.sql`
 - Kiểm tra code: `npm run lint`, `npm run build`
 
+### Dùng CSDL trên Supabase (thay cho Docker)
+
+Project Supabase `library-oop` đã có sẵn bảng và dữ liệu mẫu. Các bảng đã bật RLS để chặn truy cập qua API công khai.
+App kết nối bằng user `postgres` nên không bị RLS chặn.
+
+1. Vào Supabase → project `library-oop` → nút **Connect** → chọn **Session pooler**, rồi copy chuỗi URI.
+2. Tạo file `.env` ở thư mục gốc, thay `[YOUR-PASSWORD]` bằng mật khẩu database của project:
+   ```
+   DATABASE_URL=postgresql://postgres.xxxx:[YOUR-PASSWORD]@aws-...pooler.supabase.com:5432/postgres
+   ```
+3. Chạy `npm run dev` (không cần `docker compose`).
+
+Nếu muốn nạp lại dữ liệu mẫu: mở **SQL Editor** trên Supabase, chạy nội dung `db/schema.sql` rồi `db/seed.sql`.
+
 ### Tài khoản mẫu
 
 | Vai trò  | Email                 | Mật khẩu    |
