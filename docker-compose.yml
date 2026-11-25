@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    container_name: library-db
+    environment:
+      POSTGRES_USER: library
+      POSTGRES_PASSWORD: library
+      POSTGRES_DB: library
+    ports:
+      - "5432:5432"
+    volumes:
+      - library-data:/var/lib/postgresql/data
+      # Lần chạy đầu tiên, Postgres tự chạy các file .sql trong db/ (schema.sql rồi seed.sql)
+      - ./db:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  library-data:
