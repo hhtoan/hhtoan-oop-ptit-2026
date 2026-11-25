@@ -1,9 +1,15 @@
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 
+const connectionString =
+  process.env.DATABASE_URL ?? "postgres://library:library@localhost:5432/library";
+
+// CSDL trên cloud (vd. Supabase) bắt buộc SSL; Postgres chạy ở máy (Docker) thì không cần
+const isLocal = connectionString.includes("localhost") || connectionString.includes("127.0.0.1");
+
 // Pool kết nối dùng chung cho toàn ứng dụng
 export const pool = new Pool({
-  connectionString:
-    process.env.DATABASE_URL ?? "postgres://library:library@localhost:5432/library",
+  connectionString,
+  ssl: isLocal ? undefined : { rejectUnauthorized: false },
 });
 
 /** Thứ có thể chạy câu SQL: Pool (mặc định) hoặc 1 client đang trong transaction. */
